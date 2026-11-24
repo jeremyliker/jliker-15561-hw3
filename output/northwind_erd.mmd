@@ -1,0 +1,73 @@
+erDiagram
+  CUSTOMERS ||--o{ ORDERS : "places"
+  EMPLOYEES ||--o{ ORDERS : "handles"
+  SHIPPERS ||--o{ ORDERS : "ships"
+  ORDERS ||--|{ ORDERS_DETAILS : "contains"
+  PRODUCT ||--o{ ORDERS_DETAILS : "appears in"
+  CATEGORIES ||--o{ PRODUCT : "groups"
+  SUPPLIERS ||--o{ PRODUCT : "supplies"
+  EMPLOYEES |o--o{ EMPLOYEES : "reports to"
+  CUSTOMERS {
+    string CustomerID PK
+    string CompanyName
+    string ContactName
+    string City
+    string Region
+    string Country
+  }
+  EMPLOYEES {
+    int EmployeeID PK
+    string LastName
+    string FirstName
+    string Title
+    date HireDate
+    string Country
+    int ReportsTo FK
+  }
+  SHIPPERS {
+    int ShipperID PK
+    string CompanyName
+    string Phone
+  }
+  ORDERS {
+    int OrderID PK
+    string CustomerID FK
+    int EmployeeID FK
+    int ShipVia FK
+    date OrderDate
+    date RequiredDate
+    date ShippedDate
+    decimal Freight
+    string ShipCountry
+  }
+  ORDERS_DETAILS {
+    int OrderID PK, FK
+    int ProductID PK, FK
+    decimal UnitPrice
+    int Quantity
+    decimal Discount
+  }
+  PRODUCT {
+    int ProductID PK
+    string ProductName
+    int SupplierID FK
+    int CategoryID FK
+    string QuantityPerUnit
+    decimal Price
+    int UnitsInStock
+    int UnitsOnOrder
+    int ReorderLevel
+    bool Discontinued
+  }
+  CATEGORIES {
+    int CategoryID PK
+    string CategoryName
+    string Description
+  }
+  SUPPLIERS {
+    int SupplierID PK
+    string CompanyName
+    string ContactName
+    string City
+    string Country
+  }

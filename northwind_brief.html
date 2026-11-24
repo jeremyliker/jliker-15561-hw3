@@ -1,0 +1,426 @@
+<title>Northwind Advisory Brief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an advisory memo. One reading column (~68ch) with figure
+   plates that break wider; each question is a numbered dossier with the
+   same five parts in the same order. */
+:root {
+  --bg: #f4f6f7;
+  --paper: #ffffff;
+  --ink: #13212c;
+  --ink-2: #44535f;
+  --muted: #6b7a86;
+  --rule: #d5dde2;
+  --accent: #155e7a;      /* harbor blue */
+  --accent-soft: #e2eef3;
+  --signal: #9a5a00;      /* implication / caution */
+  --signal-soft: #fbf1e1;
+  --plate: #fcfcfb;       /* chart PNG surface, same in both themes */
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f171d; --paper: #16222b; --ink: #e6edf1; --ink-2: #b9c6cf;
+    --muted: #8d9ca7; --rule: #2a3a45; --accent: #6fb8d6;
+    --accent-soft: #17323f; --signal: #e8b155; --signal-soft: #2f2615;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f171d; --paper: #16222b; --ink: #e6edf1; --ink-2: #b9c6cf;
+  --muted: #8d9ca7; --rule: #2a3a45; --accent: #6fb8d6;
+  --accent-soft: #17323f; --signal: #e8b155; --signal-soft: #2f2615;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.0625rem/1.65 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 4rem;
+}
+.wrap { max-width: 1080px; margin: 0 auto; }
+.col { max-width: 46rem; }
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: 0.85em; background: var(--accent-soft); padding: 0.05em 0.35em; border-radius: 3px; }
+.label {
+  font: 500 0.75rem/1.2 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Masthead */
+.mast { display: grid; gap: 1.25rem; padding-block: 3rem 2.5rem; border-bottom: 2px solid var(--ink); }
+.mast-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+.mast h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; font-stretch: 80%; line-height: 0.98; letter-spacing: -0.01em; }
+.mast h1 span { color: var(--accent); }
+.lede { font-size: 1.2rem; line-height: 1.55; color: var(--ink-2); }
+@media (min-width: 560px) { .figs { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 960px) { .figs { grid-template-columns: repeat(6, 1fr); } }
+.memo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+@media (min-width: 860px) { .memo { grid-template-columns: repeat(4, 1fr); } }
+.memo div { display: grid; gap: 0.2rem; min-width: 0; }
+.memo b { font: 500 0.95rem/1.35 var(--display); }
+
+/* Section scaffolding */
+section { padding-block: 3rem 1rem; display: grid; gap: 1.75rem; }
+.sec-head { display: grid; gap: 0.6rem; }
+.sec-head h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700; font-stretch: 85%; line-height: 1.1; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+
+/* Key figures */
+.figs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.figs div { background: var(--paper); padding: 1rem 1.1rem; display: grid; gap: 0.25rem; align-content: start; }
+.figs b { font: 700 1.7rem/1 var(--display); font-stretch: 85%; font-variant-numeric: tabular-nums; }
+.figs span { font-size: 0.88rem; color: var(--ink-2); line-height: 1.35; }
+
+/* Question dossiers */
+.q { border-top: 2px solid var(--ink); }
+.q-num { font: 800 0.8rem/1 var(--mono); color: var(--accent); letter-spacing: 0.1em; }
+.answer { font-size: 1.2rem; line-height: 1.5; border-left: 3px solid var(--accent); padding-left: 1rem; }
+.answer strong { font-weight: 600; }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1.5rem 2.5rem; }
+.part { display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
+.part ul, .part ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.35rem; }
+
+/* Figure plates: chart PNGs keep their light surface in both themes */
+figure { margin: 0; display: grid; gap: 0.6rem; }
+.plate { background: var(--plate); border: 1px solid var(--rule); padding: 0.75rem; overflow-x: auto; }
+.plate img { display: block; width: 100%; height: auto; }
+.plate.narrow { max-width: 34rem; }
+.plate.tall { max-width: 40rem; }
+figcaption { font-size: 0.92rem; line-height: 1.5; color: var(--ink-2); max-width: 46rem; }
+figcaption .label { display: block; margin-bottom: 0.15rem; }
+.fig-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.5rem; align-items: start; }
+
+/* Finding and implication */
+.verdict { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1rem; }
+.box { padding: 1.1rem 1.25rem; display: grid; gap: 0.55rem; align-content: start; min-width: 0; }
+.box.find { background: var(--accent-soft); }
+.box.impl { background: var(--signal-soft); }
+.box.impl .label { color: var(--signal); }
+.box.find .label { color: var(--accent); }
+.box ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; }
+
+/* Tables */
+.tbl { overflow-x: auto; border: 1px solid var(--rule); background: var(--paper); }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font: 500 0.72rem/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+td.n, th.n { text-align: right; }
+tr:last-child td { border-bottom: 0; }
+.tag { font: 500 0.75rem/1 var(--mono); padding: 0.2rem 0.45rem; border-radius: 3px; display: inline-block; }
+.t-invest { background: var(--accent-soft); color: var(--accent); }
+.t-fix { background: var(--signal-soft); color: var(--signal); }
+.t-plain { border: 1px solid var(--rule); color: var(--ink-2); }
+
+/* Priorities */
+.prio { counter-reset: p; display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.prio li { counter-increment: p; display: grid; grid-template-columns: 2.5rem 1fr; gap: 0.75rem; align-items: start; }
+.prio li::before { content: counter(p); font: 800 1.6rem/1 var(--display); color: var(--accent); }
+.prio b { font-family: var(--display); font-weight: 600; }
+.notes { font-size: 0.92rem; color: var(--ink-2); display: grid; gap: 0.5rem; }
+.notes ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-meta">
+    <span class="label">Advisory brief · NW-1998-05</span>
+    <span class="label">Data through 6 May 1998</span>
+  </div>
+  <h1>Northwind Traders:<br><span>what the order books say</span></h1>
+  <p class="lede col">Northwind Traders is a specialty food importer and distributor. It buys gourmet products from 29 suppliers in 16 countries and resells them to grocers, delis and restaurants across Europe and the Americas. This brief reads 22 months of its sales records and answers three questions a new manager should ask first: where the business is growing, how exposed it is to a few accounts, and how well it delivers.</p>
+  <div class="memo">
+    <div><span class="label">Prepared for</span><b>Northwind management</b></div>
+    <div><span class="label">Source</span><b>Northwind Database.xlsx, 8 tables</b></div>
+    <div><span class="label">Period</span><b>4 Jul 1996 to 6 May 1998</b></div>
+    <div><span class="label">Method</span><b><code>northwind_analysis.py</code> (Python, pandas)</b></div>
+  </div>
+</header>
+
+<section aria-labelledby="org">
+  <div class="sec-head">
+    <span class="label">The organization</span>
+    <h2 id="org">A mid-sized importer with a broad but top-heavy book</h2>
+  </div>
+  <div class="figs" role="list">
+    <div role="listitem"><b>$1.27M</b><span>net revenue after $89K of discounts</span></div>
+    <div role="listitem"><b>830</b><span>orders, 2,155 order lines</span></div>
+    <div role="listitem"><b>89</b><span>buying customers in 21 countries</span></div>
+    <div role="listitem"><b>77</b><span>products in 8 categories; 8 discontinued</span></div>
+    <div role="listitem"><b>9</b><span>employees in sales, in the USA and UK</span></div>
+    <div role="listitem"><b>3</b><span>shipping carriers</span></div>
+  </div>
+  <div class="col part">
+    <p>Sales grew quickly over the period. Net revenue was $208K in the second half of 1996, $617K in 1997, and already $441K in the first four months of 1998. Beverages ($268K) and dairy ($235K) are the largest categories. The average order is worth about $1,525, but the median is $943, so a few large orders lift the average.</p>
+    <p>The records form a standard sales database. Every order line ties an order to a product; each order ties to a customer, a sales employee and a shipper; each product ties to a category and a supplier. We checked that every link is valid, so totals can be trusted across tables.</p>
+  </div>
+  <figure>
+    <div class="plate"><img src="output/northwind_erd.png" alt="Entity-relationship diagram of the eight Northwind tables: Customers, Employees and Shippers link to Orders; Orders and Product link to Orders Details; Categories and Suppliers link to Product; Employees links to itself through ReportsTo." width="3000" height="1275" loading="lazy"></div>
+    <figcaption><span class="label">Figure 0 · Data model</span>How the eight tables connect. Orders Details is the center: one row per product on an order. The 1-to-N labels show that one customer, employee or shipper has many orders.</figcaption>
+  </figure>
+</section>
+
+<!-- Q1 -->
+<section class="q" aria-labelledby="q1">
+  <div class="sec-head">
+    <span class="q-num">QUESTION 1 OF 3</span>
+    <h2 id="q1">Which countries or regions are growing or declining, and where should efforts be focused?</h2>
+  </div>
+  <p class="answer col"><strong>Every region grew, but not every country.</strong> The USA, Germany and Brazil are large and growing faster than the company. France has stalled, and five smaller markets are shrinking.</p>
+
+  <div class="pair">
+    <div class="part">
+      <span class="label">Why it matters</span>
+      <p>Sales time, credit and marketing budget are limited. Putting them where demand is already rising pays back faster than defending markets that are drifting away. A manager also needs to know which large markets are slowing before the slowdown shows up in the annual total.</p>
+    </div>
+    <div class="part">
+      <span class="label">Analytical approach</span>
+      <ul>
+        <li>The data starts in July 1996 and stops on 6 May 1998, so calendar years are not comparable. We compared the same months across years: Jan to Apr 1998 against Jan to Apr 1997, with H2 1997 against H2 1996 as a second check.</li>
+        <li>Countries are grouped into five regions by ship-to address.</li>
+        <li>Each country is placed in a segment by size (5% of revenue or more is "large") and by whether it grew faster than the company's +121%.</li>
+      </ul>
+    </div>
+  </div>
+
+  <figure>
+    <div class="plate"><img src="output/region_trend.png" alt="Line chart of quarterly net revenue by region from Q3 1996 to Q1 1998. Western Europe leads and climbs to $109k in Q1 1998; North America reaches $67k, South America $57k, Northern Europe $53k, and Southern and Eastern Europe $12k." width="1650" height="900" loading="lazy"></div>
+    <figcaption><span class="label">Figure 1.1 · Quarterly revenue by region</span>All five regions end at their highest quarter. Q2 1998 is left out because orders stop on 6 May.</figcaption>
+  </figure>
+  <figure>
+    <div class="plate"><img src="output/country_trends.png" alt="Twelve small line charts of quarterly revenue for the largest countries. Ten are drawn in blue as growing; Canada and Denmark are drawn in red as declining year over year." width="2100" height="1350" loading="lazy"></div>
+    <figcaption><span class="label">Figure 1.2 · Top 12 countries</span>Each panel has its own scale, so compare shapes rather than heights. The title of each panel gives the Jan to Apr growth and the segment. Red marks a country that declined.</figcaption>
+  </figure>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Segment</th><th>Countries (Jan–Apr growth, share of revenue)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag t-invest">Invest</span></td><td>USA +173% (19%), Germany +167% (18%), Brazil +286% (8%)</td></tr>
+        <tr><td><span class="tag t-plain">Defend</span></td><td>Austria +99% (10%), France +5% (6%)</td></tr>
+        <tr><td><span class="tag t-plain">Develop</span></td><td>UK +198%, Ireland +248%, Belgium +163%, Sweden, Spain, Italy and other small markets</td></tr>
+        <tr><td><span class="tag t-plain">Monitor</span></td><td>Venezuela +97%, Switzerland +96%</td></tr>
+        <tr><td><span class="tag t-fix">Fix or deprioritize</span></td><td>Canada −24%, Denmark −69%, Finland −45%, Mexico −44%, Portugal −18%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <div class="box find">
+      <span class="label">Main finding</span>
+      <ul>
+        <li>Western Europe is 40% of revenue and doubled (+108%). South America (+211%) and Southern and Eastern Europe (+213%) grew fastest.</li>
+        <li>The USA, Germany and Brazil make up 46% of revenue and are still accelerating.</li>
+        <li>France is a top-five market but grew only 5%.</li>
+        <li>Mexico and Portugal declined in both comparisons. Canada and Denmark fell after a strong early 1997.</li>
+      </ul>
+    </div>
+    <div class="box impl">
+      <span class="label">Business implication</span>
+      <ul>
+        <li>Put most new sales effort into the USA, Germany and Brazil.</li>
+        <li>Find out why France stalled before it starts to shrink.</li>
+        <li>Treat the UK and Ireland as the next growth markets; both grow fast on real volume.</li>
+        <li>Review Canada and Denmark account by account; one or two lost customers may explain the drop.</li>
+        <li>Read growth rates for small markets such as Sweden (+1,097% from $1.7K) as signals, not trends.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Q2 -->
+<section class="q" aria-labelledby="q2">
+  <div class="sec-head">
+    <span class="q-num">QUESTION 2 OF 3</span>
+    <h2 id="q2">How dependent is revenue on a few customers or products, and what happens if one leaves?</h2>
+  </div>
+  <p class="answer col"><strong>Revenue is broadly spread, but the top is steep.</strong> Five customers bring in a third of revenue, and losing any one of the top three would cost about 8%. The biggest single exposure is one wine, Côte de Blaye, at 11%.</p>
+
+  <div class="pair">
+    <div class="part">
+      <span class="label">Why it matters</span>
+      <p>A distributor that leans on a few large accounts or one star product can lose a big share of its income through one lost contract or one supply problem. Knowing the size of that exposure tells management where key-account care, supply contracts and backup products are worth the cost.</p>
+    </div>
+    <div class="part">
+      <span class="label">Analytical approach</span>
+      <ul>
+        <li>Revenue share of the top 1, 5 and 10 customers and products, and how many it takes to reach 50% and 80% of revenue.</li>
+        <li>The Herfindahl-Hirschman Index (HHI), a standard concentration score from 0 to 10,000. Below 1,500 counts as unconcentrated.</li>
+        <li>What-if scenarios that remove each top customer or product and measure the revenue lost. These are first-order: they assume no buyer switches products and no lost customer is replaced.</li>
+      </ul>
+    </div>
+  </div>
+
+  <figure>
+    <div class="plate"><img src="output/concentration.png" alt="Two scatter plots. Left: customers by number of orders and revenue; QUICK-Stop, Ernst Handel and Save-a-lot Markets sit far above the rest at about $105k to $110k. Right: products by units sold and revenue; Côte de Blaye stands alone at $141k, and Thüringer Rostbratwurst, second at $80k, is drawn hollow as discontinued." width="2250" height="975" loading="lazy"></div>
+    <figcaption><span class="label">Figure 2.1 · Revenue against volume</span>Each dot is a customer (left) or a product (right). The numbered blue dots are the top five by revenue. Hollow dots are discontinued products.</figcaption>
+  </figure>
+
+  <div class="fig-row">
+    <div class="tbl">
+      <table>
+        <thead><tr><th>If this customer leaves</th><th class="n">Revenue drop</th></tr></thead>
+        <tbody>
+          <tr><td>QUICK-Stop</td><td class="n">−8.7%</td></tr>
+          <tr><td>Ernst Handel</td><td class="n">−8.3%</td></tr>
+          <tr><td>Save-a-lot Markets</td><td class="n">−8.2%</td></tr>
+          <tr><td>Rattlesnake Canyon Grocery</td><td class="n">−4.0%</td></tr>
+          <tr><td>Hungry Owl All-Night Grocers</td><td class="n">−3.9%</td></tr>
+          <tr><td><b>All top 5 together</b></td><td class="n"><b>−33.2%</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>If this product is lost</th><th class="n">Revenue drop</th></tr></thead>
+        <tbody>
+          <tr><td>Côte de Blaye</td><td class="n">−11.2%</td></tr>
+          <tr><td>Thüringer Rostbratwurst (discontinued)</td><td class="n">−6.3%</td></tr>
+          <tr><td>Raclette Courdavault</td><td class="n">−5.6%</td></tr>
+          <tr><td>Tarte au sucre</td><td class="n">−3.7%</td></tr>
+          <tr><td>Camembert Pierrot</td><td class="n">−3.7%</td></tr>
+          <tr><td><b>All top 5 together</b></td><td class="n"><b>−30.6%</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="box find">
+      <span class="label">Main finding</span>
+      <ul>
+        <li>HHI is about 330 for both customers and products, so no single account dominates. Still, 13 of 89 customers make up half of revenue.</li>
+        <li>The top five customers are all active; each ordered within 22 days of the last date in the data.</li>
+        <li>Discontinued products already account for 14.6% of past revenue, including the #2 product. Part of the product risk has already happened.</li>
+        <li>Côte de Blaye is bought by 19 customers and no buyer takes more than 16% of it, so losing one customer would not take this product down with it.</li>
+      </ul>
+    </div>
+    <div class="box impl">
+      <span class="label">Business implication</span>
+      <ul>
+        <li>Assign named account managers to QUICK-Stop, Ernst Handel and Save-a-lot. Together they are a quarter of revenue.</li>
+        <li>Secure Côte de Blaye's supply with a longer contract or a second source. It is the largest single point of failure.</li>
+        <li>Plan replacements for the discontinued meat lines. Thüringer Rostbratwurst was Save-a-lot's biggest product.</li>
+        <li>Grow the middle of the customer base so no single exit costs more than 5%.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Q3 -->
+<section class="q" aria-labelledby="q3">
+  <div class="sec-head">
+    <span class="q-num">QUESTION 3 OF 3</span>
+    <h2 id="q3">How do the shippers compare on fulfillment, and do any products take longer to ship?</h2>
+  </div>
+  <p class="answer col"><strong>Federal Shipping is fastest; United Package is slowest and carries the most orders.</strong> Products ship in about the same time, with one exception: Sir Rodney's Marmalade.</p>
+
+  <div class="pair">
+    <div class="part">
+      <span class="label">Why it matters</span>
+      <p>For a food distributor, delivery speed is part of the product. Slow or late orders hurt freshness, customer trust and repeat business. Carrier choice also drives freight cost. If certain products are always slow, the cause is usually upstream, in stock levels or a supplier.</p>
+    </div>
+    <div class="part">
+      <span class="label">Analytical approach</span>
+      <ul>
+        <li>Days to ship = order date to shipped date. An order is late if it shipped after its required date.</li>
+        <li>For each shipper: mean, median and 90th-percentile days, share shipped within 7 days, late rate, unshipped orders and freight. Bootstrap 95% confidence intervals show whether gaps are real.</li>
+        <li>For each product: average days to ship of the orders it appears on, tested against the overall average. With 77 products, about 4 would look unusual by chance, so we applied a Bonferroni correction (|z| ≥ 3.41).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="fig-row">
+    <figure>
+      <div class="plate narrow"><img src="output/shipment_share.png" alt="Pie chart of 830 orders by shipper: United Package 326 orders (39%), Federal Shipping 255 (31%), Speedy Express 249 (30%)." width="1200" height="975" loading="lazy"></div>
+      <figcaption><span class="label">Figure 3.1 · Share of orders by shipper</span>United Package handles the largest share of orders.</figcaption>
+    </figure>
+    <div class="tbl">
+      <table>
+        <thead><tr><th></th><th class="n">Federal</th><th class="n">Speedy</th><th class="n">United</th></tr></thead>
+        <tbody>
+          <tr><td>Mean days to ship</td><td class="n"><b>7.5</b></td><td class="n">8.6</td><td class="n">9.2</td></tr>
+          <tr><td>95% CI of mean</td><td class="n">6.8–8.2</td><td class="n">7.7–9.5</td><td class="n">8.5–10.1</td></tr>
+          <tr><td>Median / 90th pct</td><td class="n">6 / 12</td><td class="n">7 / 18</td><td class="n">7 / 22</td></tr>
+          <tr><td>Shipped within 7 days</td><td class="n"><b>63%</b></td><td class="n">58%</td><td class="n">55%</td></tr>
+          <tr><td>Shipped late</td><td class="n"><b>3.6%</b></td><td class="n">4.9%</td><td class="n">5.1%</td></tr>
+          <tr><td>Never shipped</td><td class="n">6</td><td class="n"><b>4</b></td><td class="n">11</td></tr>
+          <tr><td>Avg freight per order</td><td class="n">$80</td><td class="n"><b>$65</b></td><td class="n">$87</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <figure>
+    <div class="plate"><img src="output/shipper_performance.png" alt="Three panels comparing shippers. Box plots of days to ship show Federal Shipping with a mean of 7.5, Speedy Express 8.6 and United Package 9.2, with United's whisker reaching 19 days. Bar charts show late rates of 3.6%, 4.9% and 5.1%, and average freight of $80, $65 and $87." width="2400" height="720" loading="lazy"></div>
+    <figcaption><span class="label">Figure 3.2 · Shipper performance</span>Left: spread of days to ship; the diamond is the mean with its 95% confidence interval. Middle: share of orders shipped late. Right: average freight per order.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="plate tall"><img src="output/product_ship_times.png" alt="Dot plot of all 77 products ranked by mean days to ship, each with a 95% confidence interval and a vertical line at the overall mean of 8.3 days. Only Sir Rodney's Marmalade, at 16.1 days, is marked red as slower beyond chance; all other products are grey." width="1500" height="2494" loading="lazy"></div>
+    <figcaption><span class="label">Figure 3.3 · Days to ship by product</span>Each dot is a product's average, with a line for its 95% confidence interval. Most intervals cross the overall average of 8.3 days. Products with few orders have wide intervals and cannot be judged.</figcaption>
+  </figure>
+
+  <div class="verdict">
+    <div class="box find">
+      <span class="label">Main finding</span>
+      <ul>
+        <li>Federal Shipping leads on every speed measure. Its confidence interval does not overlap United Package's, so the gap is very unlikely to be chance.</li>
+        <li>United Package carries 39% of orders but has the slowest average, a long tail (1 in 10 orders takes 22+ days), the most unshipped orders and the highest freight.</li>
+        <li>Late shipments are rare for all three (under 5.1%) because most orders allow 28 days. Speed is where they differ.</li>
+        <li>Only Sir Rodney's Marmalade ships slower than chance would explain: 16.1 days on average against 8.3. Its median is 9 days, so a few very slow orders drive the result.</li>
+      </ul>
+    </div>
+    <div class="box impl">
+      <span class="label">Business implication</span>
+      <ul>
+        <li>Move volume from United Package to Federal Shipping, or renegotiate United's service level.</li>
+        <li>Use Speedy Express where cost matters more than speed; it is about $15 cheaper per order.</li>
+        <li>Follow up the 21 orders that never shipped, 11 of them with United Package.</li>
+        <li>Check stock and supplier lead times for Sir Rodney's Marmalade. Products in general do not need special handling.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="prio">
+  <div class="sec-head">
+    <span class="label">Summary</span>
+    <h2 id="prio">Five priorities for the next quarter</h2>
+  </div>
+  <ol class="prio col">
+    <li><div><b>Back the winners.</b> Focus sales effort on the USA, Germany and Brazil, and build the UK and Ireland as the next markets.</div></li>
+    <li><div><b>Protect the top accounts.</b> Give QUICK-Stop, Ernst Handel and Save-a-lot named account managers.</div></li>
+    <li><div><b>Secure Côte de Blaye.</b> Lock in supply for the product behind 11% of revenue.</div></li>
+    <li><div><b>Rebalance carriers.</b> Shift orders from United Package to Federal Shipping and clear the 21 unshipped orders.</div></li>
+    <li><div><b>Investigate the soft spots.</b> France's stall, the decline in Canada, Denmark, Mexico and Portugal, and replacements for discontinued lines.</div></li>
+  </ol>
+</section>
+
+<footer class="notes col">
+  <span class="label">Notes on the data</span>
+  <ul>
+    <li>All figures come from <code>northwind_analysis.py</code> run on <code>Northwind Database.xlsx</code>. Every chart on this page is an output of that script.</li>
+    <li>Net revenue = unit price × quantity × (1 − discount). 1996 and 1998 are partial years.</li>
+    <li>Regions are our grouping of ship-to countries; the data has no region field.</li>
+    <li>Loss scenarios do not account for customers switching products or new customers replacing lost ones, so real losses would likely be smaller.</li>
+  </ul>
+</footer>
+
+</div>
